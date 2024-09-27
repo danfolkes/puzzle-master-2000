@@ -5,11 +5,24 @@ def click_me():
     if active_window:
         active_window.load_html('<h1>You clicked me!</h1>')
 
+def read_cookies():
+    #cookies = window.get_cookies()
+    active_window = webview.active_window()
+    if active_window:
+        cookies = active_window.get_cookies()
+        for c in cookies:
+            print(c.output())
+
+class Api:
+    def clearCookies(self):
+        window.clear_cookies()
+        print('Cookies cleared')
+
 menu_items = [
     wm.Menu(
         'Test Menu',
         [
-            wm.MenuAction('Change Active Window Content', click_me),
+            wm.MenuAction('Change Active Window Content', read_cookies),
             wm.MenuSeparator(),
             wm.Menu(
                 'Random',
@@ -32,7 +45,7 @@ urls = [
     'https://spelling-bee-free.pages.dev/',
     'https://www.nytimes.com/games/strands',
     'https://www.nytimes.com/games/wordle/index.html',
-    'https://spelling-bee-free.pages.dev/',
+    'https://www.nytimes.com/games/connections',
 ]
 
 if len(webview.screens) > screen_choice:
@@ -63,9 +76,10 @@ for c in range(columns):
             window_y += window_height + (padding*2)
         url_index = len(windows)
         url = urls[url_index]
-        window = webview.create_window(f"Window {c}|{r}", url, 
-                                       width=window_width, height=window_height, x=window_x, y=window_y, screen=screen,
-                                       frameless=True, easy_drag=True,shadow=False, zoomable=True)
+        # window = webview.create_window(f"Window {c}|{r}", url, 
+        #                                width=window_width, height=window_height, x=window_x, y=window_y, screen=screen,
+        #                                frameless=False, easy_drag=False,shadow=False, zoomable=True)
+        window = webview.create_window(f"Window {c}|{r}", url)
         windows.append(window)
 
 webview.start(menu=menu_items)
